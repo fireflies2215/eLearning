@@ -68,7 +68,33 @@ public class UserController {
             return new ResponseEntity<>(responseModel, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
-            responseModel.setStatus("");
+            responseModel.setStatus("failed");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
+
+    @PostMapping("/admin/login")
+    public ResponseEntity<ResponseModel> adminLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
+        logger.info("call login "+userLoginRequestDto);
+        var responseModel = new ResponseModel();
+        try{
+            var loginUser=userService.loginAdminUser(userLoginRequestDto);
+            responseModel.setStatus("success");
+
+            responseModel.setData(loginUser);
+            responseModel.setMessage("Admin login successfully");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+        }
+        catch (ResourceNotFoundException re){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(re.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e){
+            responseModel.setStatus("failed");
             responseModel.setMessage(e.getMessage());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
 

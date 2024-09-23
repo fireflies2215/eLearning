@@ -56,10 +56,27 @@ public class UserServiceImpl implements UserService {
 
         logger.info("before user login:"+user.toString());
 
-        var loginUser=userRepository.findByUsernameAndPassword(userLoginRequestDto.getUsername(),userLoginRequestDto.getPassword());
+        var loginUser=userRepository.findByUsernameAndPasswordAndRole(userLoginRequestDto.getUsername(),userLoginRequestDto.getPassword(),"user");
 
         if(loginUser==null){
             throw new ResourceNotFoundException("user not found");
+        }
+
+        logger.info("logging successfully :"+loginUser);
+        return modelMapper.map(loginUser,UserDto.class);
+    }
+
+    public UserDto loginAdminUser(UserLoginRequestDto userLoginRequestDto) {
+        logger.info("loginUser() method"+userLoginRequestDto.toString());
+
+        User user=modelMapper.map(userLoginRequestDto, User.class);
+
+        logger.info("before user login:"+user.toString());
+
+        var loginUser=userRepository.findByUsernameAndPasswordAndRole(userLoginRequestDto.getUsername(),userLoginRequestDto.getPassword(),"admin");
+
+        if(loginUser==null){
+            throw new ResourceNotFoundException("admin not found");
         }
 
         logger.info("logging successfully :"+loginUser);

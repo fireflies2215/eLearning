@@ -7,4 +7,6 @@ import com.eLearning.entity.User;
 public interface UserService {
     public UserDto registerUser(UserDto userDto);
     public UserDto loginUser(UserLoginRequestDto user);
+    public UserDto loginAdminUser(UserLoginRequestDto user);
+
 }

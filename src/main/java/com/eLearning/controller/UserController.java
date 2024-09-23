@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class UserController {
     Logger logger= LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseModel> createUser(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<ResponseModel> createUser(@RequestBody UserDto userDto){
         logger.info("call register "+userDto);
         var responseModel = new ResponseModel();
 
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseModel> login(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
+    public ResponseEntity<ResponseModel> login(@RequestBody UserLoginRequestDto userLoginRequestDto){
         logger.info("call login "+userLoginRequestDto);
         var responseModel = new ResponseModel();
         try{

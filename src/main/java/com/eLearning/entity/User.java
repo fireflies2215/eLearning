@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Table(name="users")
 @Entity
@@ -26,5 +27,12 @@ public class User {
 
     @Column(name="role")
     private String role;
+
+    @Column(name="token")
+    private String token;
+
+    @Column(name="expiry_date")
+    private LocalDateTime expiryDate;
+
 
 }

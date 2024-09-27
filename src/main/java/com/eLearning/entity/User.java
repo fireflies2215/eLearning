@@ -28,11 +28,6 @@ public class User {
     @Column(name="role")
     private String role;
 
-    @Column(name="token")
-    private String token;
-
-    @Column(name="expiry_date")
-    private LocalDateTime expiryDate;
 
 
 }

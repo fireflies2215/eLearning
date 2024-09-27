@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -90,30 +88,9 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(loginUser,UserDto.class);
     }
 
-    @Override
-    public String generatePaswordResetToken() {
-        return UUID.randomUUID().toString();
-    }
 
-    @Override
-    public UserDto findUserByEmail(String email) {
-        var user=userRepository.findByEmail(email);
-        if(user==null){
-            throw new ResourceNotFoundException("user not found");
 
-        }
-        return modelMapper.map(user,UserDto.class);
 
-    }
-
-    @Override
-    public void sendEmail(String to, String resetUrl) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("Password Reset Request");
-        message.setText("Click the link to reset your password: " + resetUrl);
-        mailSender.send(message);
-    }
 
 
 }

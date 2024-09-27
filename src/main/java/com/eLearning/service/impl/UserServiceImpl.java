@@ -26,8 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private ModelMapper modelMapper=new ModelMapper();
 
-    @Autowired
-    private JavaMailSender mailSender;
+
 
 
     @Override

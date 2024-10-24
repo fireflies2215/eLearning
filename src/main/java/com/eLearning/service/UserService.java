@@ -4,11 +4,14 @@ import com.eLearning.dto.user.UserDto;
 import com.eLearning.dto.user.UserLoginRequestDto;
 import com.eLearning.entity.User;
 
-public interface UserService {
-    public UserDto registerUser(UserDto userDto);
-    public UserDto loginUser(UserLoginRequestDto user);
-    public UserDto loginAdminUser(UserLoginRequestDto user);
+import java.util.Optional;
 
+public interface UserService {
+    public User registerUser(User user);
+    public User loginUser(UserLoginRequestDto userLoginRequestDto);
+    public User loginAdminUser(UserLoginRequestDto userLoginRequestDto);
+
+    public User updateUser(User user);
 //    void updatePassword(User user, String newPassword);
 
 }

@@ -3,6 +3,7 @@ package com.eLearning.controller;
 import com.eLearning.dto.ResponseModel;
 import com.eLearning.dto.user.UserDto;
 import com.eLearning.dto.user.UserLoginRequestDto;
+import com.eLearning.entity.User;
 import com.eLearning.service.UserService;
 import com.eLearning.util.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -28,12 +29,12 @@ public class UserController {
     Logger logger= LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseModel> createUser(@RequestBody UserDto userDto){
-        logger.info("call register "+userDto);
+    public ResponseEntity<ResponseModel> createUser(@RequestBody User user){
+
         var responseModel = new ResponseModel();
 
         try{
-            var createdUser=userService.registerUser(userDto);
+            var createdUser=userService.registerUser(user);
             responseModel.setStatus("success");
             responseModel.setData(createdUser);
             responseModel.setMessage("User created successfully");
@@ -77,16 +78,15 @@ public class UserController {
 
     }
 
-    @PostMapping("/admin/login")
-    public ResponseEntity<ResponseModel> adminLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
-        logger.info("call login "+userLoginRequestDto);
+    @PostMapping("/update")
+    public ResponseEntity<ResponseModel> updateUSerDetils(@RequestBody User user){
         var responseModel = new ResponseModel();
         try{
-            var loginUser=userService.loginAdminUser(userLoginRequestDto);
+            var updatedUser=userService.updateUser(user);
             responseModel.setStatus("success");
 
-            responseModel.setData(loginUser);
-            responseModel.setMessage("Admin login successfully");
+            responseModel.setData(updatedUser);
+            responseModel.setMessage("User Details Updated");
             return new ResponseEntity<>(responseModel, HttpStatus.OK);
         }
         catch (ResourceNotFoundException re){
@@ -100,7 +100,9 @@ public class UserController {
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-
     }
+
+
+
 }
 

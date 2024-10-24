@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,66 +33,81 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto registerUser(UserDto userDto) {
-        logger.info("call registerUser() method"+userDto.toString());
-
-        User user=modelMapper.map(userDto, User.class);
+    public User registerUser(User user) {
 
         try{
             var createdUser=userRepository.save(user);
-            logger.info("after user creation:"+createdUser);
-            return modelMapper.map(createdUser,UserDto.class);
+
+            return createdUser;
         }
         catch (DataIntegrityViolationException ex){
-            logger.error(ex.getMessage());
+
             throw new DataIntegrityViolationException("User already exists");
         }
         catch (Exception e){
-            logger.error(e.getMessage());
+
             throw new RuntimeException(e.getMessage());
 
         }
 
     }
 
+
     @Override
-    public UserDto loginUser(UserLoginRequestDto userLoginRequestDto) {
-        logger.info("loginUser() method"+userLoginRequestDto.toString());
+    public User loginUser(UserLoginRequestDto userLoginRequestDto) {
 
-        User user=modelMapper.map(userLoginRequestDto, User.class);
+        List<String> roles= Arrays.asList("student","faculty");
 
-        logger.info("before user login:"+user.toString());
+        var user=userRepository.findByEmailAndRoleIn(userLoginRequestDto.getUsername(),roles);
 
-        var loginUser=userRepository.findByUsernameAndPasswordAndRole(userLoginRequestDto.getUsername(),userLoginRequestDto.getPassword(),"user");
-
-        if(loginUser==null){
+        if(user==null){
             throw new ResourceNotFoundException("user not found");
         }
 
-        logger.info("logging successfully :"+loginUser);
-        return modelMapper.map(loginUser,UserDto.class);
+
+        System.out.println(user.getPassword());
+        System.out.println(userLoginRequestDto.getPassword());
+        if(!(user.getPassword()).equals(userLoginRequestDto.getPassword())){
+            throw new ResourceNotFoundException("Password is incorrect");
+        }
+
+        return user;
     }
 
-    public UserDto loginAdminUser(UserLoginRequestDto userLoginRequestDto) {
-        logger.info("loginUser() method"+userLoginRequestDto.toString());
+    public User loginAdminUser(UserLoginRequestDto userLoginRequestDto) {
+
 
         User user=modelMapper.map(userLoginRequestDto, User.class);
 
-        logger.info("before user login:"+user.toString());
 
-        var loginUser=userRepository.findByUsernameAndPasswordAndRole(userLoginRequestDto.getUsername(),userLoginRequestDto.getPassword(),"admin");
 
-        if(loginUser==null){
+        var loginUser=userRepository.findByEmailAndRole(userLoginRequestDto.getUsername(),"admin");
+
+        if(loginUser.isEmpty()){
             throw new ResourceNotFoundException("admin not found");
         }
 
-        logger.info("logging successfully :"+loginUser);
-        return modelMapper.map(loginUser,UserDto.class);
+        if(!(loginUser.get().getPassword()).equals(userLoginRequestDto.getPassword())){
+            throw new ResourceNotFoundException("Password is incorrect");
+        }
+
+
+        return loginUser.get();
     }
 
+    @Override
+    public User updateUser(User user) {
+        try{
+            var updatedUser=userRepository.save(user);
 
+            return updatedUser;
+        }
+        catch (Exception e){
 
+            throw new RuntimeException("Error While updating "+user.getRole()+" details : "+e.getMessage());
 
+        }
+    }
 
 
 }

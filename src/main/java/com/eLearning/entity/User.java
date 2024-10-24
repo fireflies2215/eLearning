@@ -16,10 +16,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username",unique = true)
-    private String username;
+    @Column(name="first_name")
+    private String firstName;
 
-    @Column(name="email",unique = true)
+    @Column(name="middle_name")
+    private String middleName;
+
+    @Column(name="last_name")
+    private String lastName;
+
+    @Column(name="email")
     private String email;
 
     @Column(name="password")
@@ -27,6 +33,9 @@ public class User {
 
     @Column(name="role")
     private String role;
+
+    @Column(name="status")
+    private boolean status;
 
 
 

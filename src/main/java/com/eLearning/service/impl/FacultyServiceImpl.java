@@ -50,7 +50,7 @@ public class FacultyServiceImpl implements FacultyService {
         }
 
         catch (Exception e){
-            throw new RuntimeException("Error While updating faculty details");
+            throw new RuntimeException("Error While fetching faculty");
         }
     }
 

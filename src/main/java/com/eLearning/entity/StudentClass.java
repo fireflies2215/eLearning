@@ -10,7 +10,7 @@ import lombok.Data;
 public class StudentClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="class_id")
+    @Column(name="id")
     private Long id;
 
     @Column(name="class_name",unique = true)

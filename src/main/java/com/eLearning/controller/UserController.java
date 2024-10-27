@@ -1,9 +1,12 @@
 package com.eLearning.controller;
 
 import com.eLearning.dto.ResponseModel;
+import com.eLearning.dto.user.ClassTimeTableRequestDto;
+import com.eLearning.dto.user.FacultyTimetableRequestDto;
 import com.eLearning.dto.user.UserDto;
 import com.eLearning.dto.user.UserLoginRequestDto;
 import com.eLearning.entity.User;
+import com.eLearning.service.TimetableService;
 import com.eLearning.service.UserService;
 import com.eLearning.util.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -25,6 +28,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TimetableService timetableService;
+
 
     Logger logger= LoggerFactory.getLogger(UserController.class);
 
@@ -99,6 +106,28 @@ public class UserController {
             responseModel.setMessage(e.getMessage());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
 
+        }
+    }
+
+    @PostMapping("/class/timetable")
+    public ResponseEntity<ResponseModel> getTimetableByDateAndClass(@RequestBody ClassTimeTableRequestDto classTimeTableRequestDto){
+
+        System.out.println(classTimeTableRequestDto);
+        var responseModel=new ResponseModel();
+        try{
+            var timetableList=timetableService.getTimeTableByDateAndClass(classTimeTableRequestDto.getDate(),classTimeTableRequestDto.getClassId());
+
+            responseModel.setStatus("success");
+            responseModel.setData(timetableList);
+            responseModel.setMessage("Class Timetable");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+        }
+
+        catch (Exception e){
+            responseModel.setStatus("failed while fetching timetable");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

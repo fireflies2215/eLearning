@@ -1,8 +1,10 @@
 package com.eLearning.controller;
 
 import com.eLearning.dto.ResponseModel;
+import com.eLearning.dto.user.FacultyTimetableRequestDto;
 import com.eLearning.service.FacultyService;
 import com.eLearning.service.StudentClassService;
+import com.eLearning.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class FacultyController {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private TimetableService timetableService;
 
 
     @GetMapping("/list")
@@ -82,6 +87,25 @@ public class FacultyController {
             responseModel.setMessage(e.getMessage());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @PostMapping("/timetable")
+    public ResponseEntity<ResponseModel> getTimetableByDateAndFaculty(@RequestBody FacultyTimetableRequestDto facultyTimetableRequestDto){
+        var responseModel=new ResponseModel();
+        try{
+            var timetableList=timetableService.getTimeTableByDateAndFaculty(facultyTimetableRequestDto.getDate(),facultyTimetableRequestDto.getFacultyId());
+
+            responseModel.setStatus("success");
+            responseModel.setData(timetableList);
+            responseModel.setMessage("Faculty Timetable");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+        }
+
+        catch (Exception e){
+            responseModel.setStatus("failed while fetching timetable");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

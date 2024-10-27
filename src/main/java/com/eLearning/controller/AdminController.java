@@ -3,8 +3,10 @@ package com.eLearning.controller;
 import com.eLearning.dto.ResponseModel;
 import com.eLearning.dto.user.UserLoginRequestDto;
 import com.eLearning.entity.StudentClass;
+import com.eLearning.entity.Timetable;
 import com.eLearning.service.FacultyService;
 import com.eLearning.service.StudentClassService;
+import com.eLearning.service.TimetableService;
 import com.eLearning.service.UserService;
 import com.eLearning.util.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class AdminController {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private TimetableService timetableService;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseModel> adminLogin(@RequestBody UserLoginRequestDto userLoginRequestDto) {
@@ -153,6 +158,25 @@ public class AdminController {
         catch (Exception e){
             responseModel.setStatus("failed");
             responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PostMapping("/timetable/register")
+    public ResponseEntity<ResponseModel> registerTimetable(@RequestBody Timetable timetable){
+        var responseModel=new ResponseModel();
+        try{
+            var registeredTimetable=timetableService.addTimetable(timetable);
+            responseModel.setStatus("success");
+            responseModel.setMessage("Timetable successfully registers");
+            responseModel.setData(registeredTimetable);
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+        }
+
+        catch (Exception e){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(e.getMessage().toString());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

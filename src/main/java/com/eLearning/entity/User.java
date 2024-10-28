@@ -29,6 +29,10 @@ public class User {
     @Column(name="email")
     private String email;
 
+    @ManyToOne
+    @JoinColumn(name = "class_id")  // This column will store the foreign key for the associated class
+    private StudentClass studentClass;
+
     @Column(name="password")
     private String password;
 
@@ -37,6 +41,8 @@ public class User {
 
     @Column(name="status")
     private boolean status;
+
+
 
 
 

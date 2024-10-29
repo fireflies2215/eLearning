@@ -27,4 +27,7 @@ public class Subject {
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private StudentClass studentClass;
+
+    @Column(name = "image")
+    private String image;
 }

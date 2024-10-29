@@ -16,6 +16,9 @@ public class StudentClass {
     @Column(name="class_name",unique = true)
     private String className;
 
+    @Column(name="image")
+    private String image;
+
     @Column(name="status")
     private boolean status;
 }

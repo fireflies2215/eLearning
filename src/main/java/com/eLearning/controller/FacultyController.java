@@ -2,9 +2,13 @@ package com.eLearning.controller;
 
 import com.eLearning.dto.ResponseModel;
 import com.eLearning.dto.user.FacultyTimetableRequestDto;
+import com.eLearning.entity.Result;
+import com.eLearning.repository.ResultRepository;
 import com.eLearning.service.FacultyService;
+import com.eLearning.service.ResultService;
 import com.eLearning.service.StudentClassService;
 import com.eLearning.service.TimetableService;
+import com.eLearning.util.ResourceAlreadyExitsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,9 @@ public class FacultyController {
 
     @Autowired
     private TimetableService timetableService;
+
+    @Autowired
+    private ResultService resultService;
 
 
     @GetMapping("/list")
@@ -103,9 +110,12 @@ public class FacultyController {
         }
 
         catch (Exception e){
-            responseModel.setStatus("failed while fetching timetable");
+            responseModel.setStatus("failed");
             responseModel.setMessage(e.getMessage());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 }

@@ -2,10 +2,9 @@ package com.eLearning.controller;
 
 import com.eLearning.dto.ResponseModel;
 import com.eLearning.dto.user.FacultyTimetableRequestDto;
-import com.eLearning.service.FacultyService;
-import com.eLearning.service.StudentClassService;
-import com.eLearning.service.StudentService;
-import com.eLearning.service.TimetableService;
+import com.eLearning.entity.Result;
+import com.eLearning.service.*;
+import com.eLearning.util.ResourceAlreadyExitsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,9 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private ResultService resultService;
 
 
     @GetMapping("/list")
@@ -84,6 +86,51 @@ public class StudentController {
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @PostMapping("/result/add")
+    public ResponseEntity<ResponseModel> addStudentResult(@RequestBody Result result){
+        var responseModel=new ResponseModel();
+        try{
+            var studentResult=resultService.addResult(result);
+            responseModel.setStatus("success");
+            responseModel.setData(studentResult);
+            responseModel.setMessage("Result");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+        }
+
+        catch (ResourceAlreadyExitsException rae){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(rae.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
+        }
+
+        catch (Exception e){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/result/{studentId}")
+    public ResponseEntity<ResponseModel> getStudentResult(@PathVariable("studentId") int studentId){
+        var responseModel=new ResponseModel();
+        try{
+            var studentResult=resultService.getResultByStudent(studentId);
+            responseModel.setStatus("success");
+            responseModel.setData(studentResult);
+            responseModel.setMessage("Result");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+        }
+
+
+        catch (Exception e){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

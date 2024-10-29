@@ -176,7 +176,7 @@ public class AdminController {
 
         catch (Exception e){
             responseModel.setStatus("failed");
-            responseModel.setMessage(e.getMessage().toString());
+            responseModel.setMessage(e.getMessage());
             return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

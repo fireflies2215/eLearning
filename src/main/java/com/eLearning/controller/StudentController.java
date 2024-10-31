@@ -133,6 +133,26 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/result/by-subject/{subjectId}")
+    public ResponseEntity<ResponseModel> getStudentResultsBySubject(@PathVariable("subjectId") int subjectId){
+        var responseModel=new ResponseModel();
+        try{
+            var studentResult=resultService.getResultBySubject(subjectId);
+            responseModel.setStatus("success");
+            responseModel.setData(studentResult);
+            responseModel.setMessage("Result");
+            return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+        }
+
+
+        catch (Exception e){
+            responseModel.setStatus("failed");
+            responseModel.setMessage(e.getMessage());
+            return new ResponseEntity<>(responseModel, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 

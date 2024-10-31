@@ -41,4 +41,17 @@ public class ResultServiceImpl implements ResultService {
             throw new RuntimeException("Error While fetching result : "+e.getMessage());
         }
     }
+
+    @Override
+    public List<Result> getResultBySubject(int subjectId) {
+        try{
+            var studentResult=resultRepository.findBySubjectId(subjectId);
+            return studentResult;
+        }
+
+        catch (Exception e){
+
+            throw new RuntimeException("Error While fetching result : "+e.getMessage());
+        }
+    }
 }

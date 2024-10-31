@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface ResultRepository  extends JpaRepository<Result,Integer> {
     List<Result> findByUserId(int studentId);
     Optional<Result> findByUserIdAndSubjectId(Long studentId, Long subjectId);
+
+    List<Result> findBySubjectId(int subjectId);
 }

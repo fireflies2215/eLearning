@@ -29,6 +29,9 @@ public class User {
     @Column(name="email")
     private String email;
 
+    @Column(name="contact")
+    private String contact;
+
     @ManyToOne
     @JoinColumn(name = "class_id")  // This column will store the foreign key for the associated class
     private StudentClass studentClass;
